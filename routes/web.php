@@ -14,5 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
+});
+
+Route::middleware('auth')->group(function(){
+    Route::get('/admin',fn()=>'問い合わせ一覧(準備中)')->name('admin.index');
+    Route::get('/admin/tags',fn()=>'tag編集画面（準備中）')->name('admin.tags.edit');
 });
