@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +20,5 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function(){
     Route::get('/admin',fn()=>'問い合わせ一覧(準備中)')->name('admin.index');
-    Route::get('/admin/tags',fn()=>'tag編集画面（準備中）')->name('admin.tags.edit');
+    Route::resource('admin/tags',TagController::class)->except(['create','show']);
 });
