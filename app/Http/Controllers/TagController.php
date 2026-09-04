@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Request\TagRequest;
 use App\Models\Tag;
 
 class TagController extends Controller
@@ -44,7 +45,7 @@ class TagController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * タグの削除
      */
     public function destroy( Tag $tag)
     {
