@@ -8,11 +8,11 @@ use Illuminate\Validation\Rule;
 class TagRequest extends FormRequest
 {
     /**
-     * リクエスとの認可
+     * 認可
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

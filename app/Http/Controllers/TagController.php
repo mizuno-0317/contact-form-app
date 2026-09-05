@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Request\TagRequest;
+use App\Http\Requests\TagRequest;
 use App\Models\Tag;
 
 class TagController extends Controller
@@ -14,6 +14,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::get();
+        $this->authorize('viewAny',Tag::class);
         return view('admin.index',compact('tags'));
     }
 
@@ -22,6 +23,7 @@ class TagController extends Controller
      */
     public function store(TagRequest $request)
     {
+        $this->authorize('create',Tag::class);
         Tag::create($request->validated());
         return redirect()->route('admin.index');
     }
@@ -32,6 +34,7 @@ class TagController extends Controller
 
     public function edit(Tag $tag)
     {
+        $this->authorize('view',$tag);
         return view('admin.tags.edit',compact('tag'));
     }
 
@@ -40,6 +43,7 @@ class TagController extends Controller
      */
     public function update(TagRequest $request, Tag $tag)
     {
+        $this->authorize('update',$tag);
         $tag-> update($request->validated());
         return redirect()->route('admin.index');
     }
@@ -49,6 +53,7 @@ class TagController extends Controller
      */
     public function destroy( Tag $tag)
     {
+        $this->authorize('delete',$tag);
         $tag -> delete();
         return direct()->route('admin.index');
     }
