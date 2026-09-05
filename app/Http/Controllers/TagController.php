@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\TagRequest;
+use App\Http\Requests\StoreTagRequest;
 use App\Models\Tag;
 
 class TagController extends Controller
@@ -21,7 +21,7 @@ class TagController extends Controller
     /**
      * タグを新規作成する
      */
-    public function store(TagRequest $request)
+    public function store(StoreTagRequest $request)
     {
         $this->authorize('create',Tag::class);
         Tag::create($request->validated());
@@ -41,7 +41,7 @@ class TagController extends Controller
     /**
      * タグを更新する
      */
-    public function update(TagRequest $request, Tag $tag)
+    public function update(StoreTagRequest $request, Tag $tag)
     {
         $this->authorize('update',$tag);
         $tag-> update($request->validated());
@@ -55,6 +55,6 @@ class TagController extends Controller
     {
         $this->authorize('delete',$tag);
         $tag -> delete();
-        return direct()->route('admin.index');
+        return redirect()->route('admin.index');
     }
 }
