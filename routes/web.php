@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ContactController;
 
@@ -21,10 +22,13 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function(){
-    Route::get('/admin',fn()=>'問い合わせ一覧(準備中)')->name('admin.index');
+    Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
+    Route::get('/admin/contacts/{contact}',[AdminController::class,'show'])->name('admin.show');
+    Route::delete('/admin/contacts/{contact}',[AdminController::class,'destroy'])->name('admin.destroy');
     Route::resource('admin/tags',TagController::class)->except(['create','show']);
 });
 
 Route::resource('contacts',ContactController::class)->only(['create','store']);
 Route::post('/contacts/confirm',[ContactController::class,'confirm']);
 Route::get('/contacts/thanks',[ContactController::class,'thanks'])->name('contact.thanks');
+
