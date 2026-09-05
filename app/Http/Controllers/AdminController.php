@@ -16,6 +16,9 @@ class AdminController extends Controller
      */
     public function index(IndexContactRequest $request)
     {
+
+        $this->authorize('viewAny',Contact::class);
+        
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -78,43 +81,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * お問い合わせの詳細表示
      */
     public function show(Contact $contact)
     {
+        $this->authorize('view',$contact);
         return view ('admin.show',compact('contact'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**
@@ -122,6 +94,7 @@ class AdminController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        $this->authorize('delete',$contact);
         $contact->delete();
         return redirect()->route('admin.index');
     }
