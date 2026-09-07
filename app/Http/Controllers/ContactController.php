@@ -39,13 +39,19 @@ class ContactController extends Controller
      * 問い合わせ内容を作成
     */
 
-    public function store( StoreContactRequest $request )
+    public function store(StoreContactRequest $request)
     {
+
         $validated = $request->validated();
-        Contact::create($validated);
+
+        $tagIds = $validated['tag_ids'] ?? [];
+        unset($validated['tag_ids']);
+
+        $contact = Contact::create($validated);
+
+        $contact->tags()->sync($tagIds);
 
         return redirect()->route('contact.thanks');
-
     }
 
     public function thanks()
