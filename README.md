@@ -1,3 +1,38 @@
+# お問い合わせ管理アプリ
+
+## 概要
+
+一般ユーザーからのお問い合わせフォームと、お問い合わせ内容を管理する管理画面のアプリケーションです。
+
+## 使用技術
+
+- PHP
+- Laravel
+- MySQL
+- Docker
+- HTML / Tailwindcss
+
+## 機能
+
+### ユーザー側
+
+- お問い合わせ入力
+- お問い合わせ確認
+- お問い合わせ送信
+
+### 管理者側
+
+- お問い合わせ一覧表示
+- お問い合わせ検索
+- お問い合わせ詳細表示
+- お問い合わせ削除
+- タグ管理
+
+## ER図
+
+![ER図](images/er-diagram.png)
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
