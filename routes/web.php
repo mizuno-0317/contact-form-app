@@ -16,9 +16,12 @@ use App\Http\Controllers\ContactController;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('contacts.create');
-});
+// Route::get('/', function () {
+//     return redirect()->route('contacts.create');
+// });
+
+Route::get('/',[ContactController::class,'create'])->name('contact.create');
+
 
 
 Route::middleware('auth')->group(function(){
@@ -30,5 +33,5 @@ Route::middleware('auth')->group(function(){
 
 Route::resource('contacts',ContactController::class)->only(['create','store']);
 Route::post('/contacts/confirm',[ContactController::class,'confirm']);
-Route::get('/contacts/thanks',[ContactController::class,'thanks'])->name('contact.thanks');
+Route::get('/thanks',[ContactController::class,'thanks'])->name('contact.thanks');
 
