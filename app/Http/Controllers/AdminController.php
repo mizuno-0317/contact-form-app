@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Contact;
-use App\Models\Category;
-use App\Models\Tag;
 use App\Http\Requests\IndexContactRequest;
-use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Contact;
+use App\Models\Tag;
 
 class AdminController extends Controller
 {
@@ -17,67 +15,69 @@ class AdminController extends Controller
     public function index(IndexContactRequest $request)
     {
 
-        $this->authorize('viewAny',Contact::class);
-        
-        $categories = Category::all();
-        $tags = Tag::all();
-
+        $this->authorize('viewAny', Contact::class);
 
         /**
          * 検索表示
          */
-
-        $query = Contact::query();
+        $query = Contact::query()->with(['category', 'tags']);
 
         /**
          * カテゴリ検索
          */
-
         $query->when(
-            $request->filled('category'),
-            function($query)use($request){
-                $query->where('category_id',$request->category);
+            $request->filled('category_id'),
+            function ($query) use ($request) {
+                $query->where('category_id', $request->category_id);
             }
         );
 
         /**
          * 性別検索
          */
-
         $query->when(
-            $request->filled('gender') && $request->gender !=0,
-            function($query)use($request){
-                $query->where('gender',$request->gender);
+            $request->filled('gender') && $request->gender != 0,
+            function ($query) use ($request) {
+                $query->where('gender', $request->gender);
             }
         );
 
         /**
          * 日付検索
          */
-
         $query->when(
             $request->filled('date'),
-            function($query)use($request){
-                $query->whereDate('created_at',$request->date);
+            function ($query) use ($request) {
+                $query->whereDate('created_at', $request->date);
             }
         );
 
         /**
          * キーワード検索
          */
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('first_name', 'like', "%{$keyword}%")
+                    ->orWhere('last_name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%");
+            });
+        }
 
-        $query->when(
-            $request->filled('keyword'),
-            function($query)use($request){
-                $query->where('first_name','Like',"%{$request->keyword}%")
-                ->orWhere('last_name','Like',"%{$request->keyword}%")
-                ->orWhere('email','Like',"%{$request->keyword}%");
-            }
-        );
+        // $query->when(
+        //     $request->filled('keyword'),
+        //     function($query)use($request){
+        //         $query->where('first_name','Like',"%{$request->keyword}%")
+        //         ->orWhere('last_name','Like',"%{$request->keyword}%")
+        //         ->orWhere('email','Like',"%{$request->keyword}%");
+        //     }
+        // );
 
         $contacts = $query->simplePaginate(7);
+        $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.index',compact('categories','tags','contacts'));
+        return view('admin.index', compact('categories', 'tags', 'contacts'));
     }
 
     /**
@@ -85,8 +85,9 @@ class AdminController extends Controller
      */
     public function show(Contact $contact)
     {
-        $this->authorize('view',$contact);
-        return view ('admin.show',compact('contact'));
+        $this->authorize('view', $contact);
+
+        return view('admin.show', compact('contact'));
     }
 
     /**
@@ -94,8 +95,9 @@ class AdminController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        $this->authorize('delete',$contact);
+        $this->authorize('delete', $contact);
         $contact->delete();
+
         return redirect()->route('admin.index');
     }
 }
