@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/contacts/{contact}',[AdminController::class,'show'])->name('admin.show');
     Route::delete('/admin/contacts/{contact}',[AdminController::class,'destroy'])->name('admin.destroy');
     Route::resource('admin/tags',TagController::class)->except(['create','show']);
+    Route::get('/contacts/export',[ContactController::class,'export'])->name('contacts.export');
 });
 
 Route::resource('contacts',ContactController::class)->only(['create','store']);
